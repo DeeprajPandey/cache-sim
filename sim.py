@@ -68,6 +68,10 @@ for indx, (instruction, address) in enumerate(itertools.izip(instructions, addr)
 #calculating hit rate, miss rate, average time per instruction
 hit_rate=(float(hits)/10001) * 100
 miss_rate=(float(misses)/10001)*100
-avg_time_per_Instruction=(hit_rate/100*1)+(miss_rate/100*301)
-print avg_time_per_Instruction
+avg_time_per_Instruction=(hit_rate/100*1)+(miss_rate/100*301)hit_rate=(float(hits)/10001) * 100
+miss_rate=(float(misses)/10001)*100
+avg_cycles_per_Instruction=(hit_rate/100*1)+(miss_rate/100*301)
+print "Average cycles per Instruction: ",avg_cycles_per_Instruction
+print "Hit Rate:",hit_rate
+print "Miss Rate: ",miss_rate
     
