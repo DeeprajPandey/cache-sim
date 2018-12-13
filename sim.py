@@ -39,6 +39,7 @@ L1_set_array = [-1]*L1_limit
 
 # Using itertools to go through the instruction and address lists in parallel
 # and wrapping them with enumerate to keep track of the index
+
 for indx, (instruction, address) in enumerate(itertools.izip(instructions, addr)):
     # 16 = 2^4. offset is 4 bits from right
     adr_offset = address[28:32]
@@ -64,4 +65,9 @@ for indx, (instruction, address) in enumerate(itertools.izip(instructions, addr)
             L1_tag_array[adr_index] = adr_tag
             L1_set_array[adr_index] = bin2dec(address)
     
+#calculating hit rate, miss rate, average time per instruction
+hit_rate=(float(hits)/10001) * 100
+miss_rate=(float(misses)/10001)*100
+avg_time_per_Instruction=(hit_rate/100*1)+(miss_rate/100*301)
+print avg_time_per_Instruction
     
