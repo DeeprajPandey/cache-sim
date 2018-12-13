@@ -8,6 +8,10 @@ def hex2bin(hex_v):
     # truncating 13 bits from left (2 for '0b' and rest to make it 32 bit)
     return bin(int(hex_v, base))[13:]
 
+def bin2dec(bin_index):
+    base = 2
+    return int(bin_index,base)
+
 
 command = []
 offset = []
