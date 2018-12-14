@@ -15,7 +15,12 @@ def hex2bin(hex_v):
     base = 16
     bits = 32
     # truncating 13 bits from left (2 for '0b' and rest to make it 32 bit)
-    return bin(int(hex_v, base))[13:].zfill(bits)
+    binary = bin(int(hex_v, base))[2:]
+    if len(binary) > 32:
+        diff = len(binary)-32
+        binary = binary[diff:].zfill(bits)
+    
+    return binary
 
 # Converts binary to decimal
 def bin2dec(bin_index):
@@ -39,7 +44,10 @@ with open('small.memtrace','rU') as trace:
 
 # Counters for the number of hits and misses
 hits = 0
+L_hits = 0
+S_hits = 0
 misses = 0
+comp_misses = 0
 
 # For L1 Cache
 # Cache size = 32 kB
@@ -64,9 +72,12 @@ for indx, (instruction, address) in enumerate(itertools.izip(instructions, addr)
     if instruction == 'L':
         if L1_tag_array[adr_index] == adr_tag:
             hits += 1
+            L_hits += 1
         else:
             # increment misses
             misses += 1
+            if L1_tag_array[adr_index] == -1:
+                comp_misses += 1
             # add the tag to that index to simulate the data being added to block in set array
             L1_tag_array[adr_index] = adr_tag
             L1_set_array[adr_index] = bin2dec(address)
@@ -74,8 +85,11 @@ for indx, (instruction, address) in enumerate(itertools.izip(instructions, addr)
     if instruction == 'S':
         if L1_tag_array[adr_index] == adr_tag:
             hits += 1
+            S_hits += 1
         else:
             misses += 1
+            if L1_tag_array[adr_index] == -1:
+                comp_misses += 1
             # add the tag to that index to simulate the data being added to block in set array
             L1_tag_array[adr_index] = adr_tag
             L1_set_array[adr_index] = bin2dec(address)
@@ -84,8 +98,14 @@ for indx, (instruction, address) in enumerate(itertools.izip(instructions, addr)
 hit_rate=(float(hits)/10000) * 100
 miss_rate=(float(misses)/10000)*100
 avg_cycles_per_Instruction=(hit_rate/100*1)+(miss_rate/100*301)
-print "Average cycles per Instruction:",avg_cycles_per_Instruction
 print "Hits:", hits
+print "Read Hits:", L_hits
+print "Write Hits:", S_hits
+print("\n")
 print "Misses:", misses
+print "Compulsory Misses:", comp_misses
+print("\n")
 print "Hit Rate:",hit_rate
+print "Read Hit Rate:", float(L_hits)/hits*100
+print "Write Hit Rate:", float(S_hits)/hits*100
 print "Miss Rate:",miss_rate
